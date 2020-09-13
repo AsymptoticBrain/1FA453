@@ -9,16 +9,24 @@ __license__ = "MIT"
 
 import numpy as np
 
-DATA = 'pulses.csv'
+DATA_PATH = 'pulses.csv'
 
 
 def main():
-    question_1()
+    data = load_data_file()
+    convert_to_voltages(data)
 
 
-def question_1():
-    data = np.loadtxt(fname=DATA, delimiter=',')
+def load_data_file():
+    data = np.loadtxt(fname=DATA_PATH, delimiter=',')
     print(data)
+
+    return data
+
+
+def convert_to_voltages(data):
+    converted_data = np.array(data) * 2
+    print(converted_data)
 
 
 if __name__ == '__main__':
