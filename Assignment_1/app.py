@@ -19,14 +19,16 @@ def main():
 
 def load_data_file():
     data = np.loadtxt(fname=DATA_PATH, delimiter=',')
-    print(data)
+    # print(data)
 
     return data
 
 
 def convert_to_voltages(data):
-    converted_data = np.array(data) * 2
-    print(converted_data)
+    # print(data[0:3, 1:])
+    converted_data = (data[0:, 1:]) * 2
+    total = np.c_[data[0:, 0:1], converted_data]
+    print(total)
 
 
 if __name__ == '__main__':
