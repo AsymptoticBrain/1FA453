@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Insert info here
+Assignment 1
 """
 
 __author__ = "Timothy Johansson"
