@@ -14,12 +14,15 @@ DATA_PATH = 'pulses.csv'
 MEAN_NUMBER = 10
 
 
+# TODO how to deal with the timestamp, keep or ditch ? it's not being used atm
+
 def main():
     data = load_data_file()
     converted_data = convert_to_voltages(data)
     print(converted_data[0, 1:])
     create_plot(converted_data[0, 0:])
     corrected_data = baseline_correction(converted_data[0:, 1:])
+    create_plot(corrected_data[0, 0:])
     print(corrected_data)
 
 
