@@ -11,19 +11,22 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 DATA_PATH = 'pulses.csv'
+MEAN_NUMBER = 10
 
 
 def main():
     data = load_data_file()
     converted_data = convert_to_voltages(data)
     print(converted_data[0, 1:])
-    create_plot(converted_data[0, 1:])
+    create_plot(converted_data[0, 0:])
+    corrected_data = baseline_correction(converted_data[0:, 1:])
+    print(corrected_data)
 
 
 # load the data to a numpy array and returns it
 def load_data_file():
     data = np.loadtxt(fname=DATA_PATH, delimiter=',')
-    #print(data)
+    # print(data)
 
     return data
 
@@ -37,19 +40,35 @@ def convert_to_voltages(data):
 
 
 def create_plot(data):
-    # Data for plotting
-    t = np.arange( data.size)
-    s = data
+    title = data[0]
+    data_points = data[1:]
 
     fig, ax = plt.subplots()
-    ax.plot(t, s)
-
-    ax.set(xlabel='time (s)', ylabel='voltage (mV)',
-           title='About as simple as it gets, folks')
+    ax.plot(data_points)
+    ax.set(ylabel='voltage (mV)',
+           title=f'Neutron pulse for timestamp: {title} ')
     ax.grid()
-
-    #fig.savefig("test.png")
     plt.show()
+
+    # fig.savefig("plot.png")
+
+
+def baseline_correction(data):
+    corrected_array = []
+
+    for row in data:
+        mean = calculate_mean(row)
+        corrected_row = row - mean
+        corrected_array.append(corrected_row)
+
+    corrected_array = np.asarray(corrected_array)
+    return corrected_array
+
+
+def calculate_mean(data):
+    mean = np.sum(data[0:MEAN_NUMBER]) / MEAN_NUMBER
+
+    return mean
 
 
 if __name__ == '__main__':
