@@ -24,6 +24,8 @@ def main():
     corrected_data = baseline_correction(converted_data[0:, 1:])
     create_plot(corrected_data[0, 0:])
     print(corrected_data)
+    max_energy = calculate_max(corrected_data)
+    create_histogram_energy(max_energy)
 
 
 # load the data to a numpy array and returns it
@@ -72,6 +74,40 @@ def calculate_mean(data):
     mean = np.sum(data[0:MEAN_NUMBER]) / MEAN_NUMBER
 
     return mean
+
+
+def calculate_max(data):
+    max_value_array = []
+    for row in data:
+        max_value = np.max(row)
+        max_value_array.append(max_value)
+
+    max_value_array = np.asarray(max_value_array)
+
+    return max_value_array
+
+
+def calculate_total_energy(data):
+    total_energy_array = []
+    for row in data:
+        total_energy = np.sum(row)
+        total_energy_array.append(total_energy)
+
+    total_energy_array = np.asarray(total_energy_array)
+
+    return total_energy_array
+
+
+def create_histogram_energy(max_energy, total_energy=[]):
+    title = 'test'
+    data_points = max_energy
+
+    fig, ax = plt.subplots()
+    ax.hist(data_points)
+    ax.set(ylabel='voltage (mV)',
+           title=f'Neutron pulse for timestamp: {title} ')
+    ax.grid()
+    plt.show()
 
 
 if __name__ == '__main__':
