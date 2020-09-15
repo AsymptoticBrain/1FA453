@@ -12,52 +12,63 @@ import matplotlib.pyplot as plt
 
 DATA_PATH = 'pulses.csv'
 MEAN_NUMBER = 10
+PULSE = 200
 
-
-# TODO how to deal with the timestamp, keep or ditch ? it's not being used atm
 
 def main():
+    # Question 1:
     data = load_data_file()
-    converted_data = convert_to_voltages(data)
-    print(converted_data[0, 1:])
-    create_plot(converted_data[0, 0:])
-    corrected_data = baseline_correction(converted_data[0:, 1:])
-    create_plot(corrected_data[0, 0:])
-    print(corrected_data)
+
+    # Question 2:
+    converted_data, timestamp = convert_to_voltages(data)
+
+    # Question 3:
+    create_plot(converted_data[PULSE - 1], title=timestamp[PULSE - 1])
+
+    # Question 4:
+    corrected_data = baseline_correction(converted_data)
+
+    # Question 5:
+    create_plot(corrected_data[PULSE - 1], title=f'{timestamp[PULSE - 1]}_baseline')
+
+    # Question 6:
     max_energy = calculate_max(corrected_data)
-    create_histogram_energy(max_energy)
+    tot_energy = calculate_total_energy(corrected_data)
+    create_histogram_energy(max_energy, tot_energy)
 
 
-# load the data to a numpy array and returns it
+# Load the data to a numpy array and returns it.
 def load_data_file():
     data = np.loadtxt(fname=DATA_PATH, delimiter=',')
-    # print(data)
+    print(data)
 
     return data
 
 
-# Creates a new array with converted data from column [1:] and adds the first column of the original array again
+# Creates a new array with converted data and one for the time stamps.
 def convert_to_voltages(data):
     converted_data = (data[0:, 1:]) / (2e-10 - 1) * 0.6
-    updated_array = np.c_[data[0:, 0:1], converted_data]
+    timestamps = data[0:, 0]
 
-    return updated_array
+    return converted_data, timestamps
 
 
-def create_plot(data):
-    title = data[0]
-    data_points = data[1:]
+# Plots the deposited neutron pulse for a specific timestamp
+def create_plot(data, title):
+    title = title
+    data_points = data
 
     fig, ax = plt.subplots()
     ax.plot(data_points)
-    ax.set(ylabel='voltage (mV)',
-           title=f'Neutron pulse for timestamp: {title} ')
+    ax.set(ylabel='voltage (V)',
+           title=f'Neutron pulse for timestamp: {title}')
     ax.grid()
     plt.show()
 
-    # fig.savefig("plot.png")
+    # fig.savefig(f'neutron_pulse_{title}.png')
 
 
+# Calculates the mean of the first few elements and substracts this from the whole row
 def baseline_correction(data):
     corrected_array = []
 
@@ -67,6 +78,7 @@ def baseline_correction(data):
         corrected_array.append(corrected_row)
 
     corrected_array = np.asarray(corrected_array)
+
     return corrected_array
 
 
@@ -98,14 +110,18 @@ def calculate_total_energy(data):
     return total_energy_array
 
 
-def create_histogram_energy(max_energy, total_energy=[]):
-    title = 'test'
-    data_points = max_energy
+def create_histogram_energy(max_energy, total_energy):
+    fig, ax = plt.subplots()
+    ax.hist(max_energy, bins=50)
+    ax.set(ylabel='# of pulses', xlabel='max energy (V)',
+           title=f'Histogram for max energy')
+    ax.grid()
+    plt.show()
 
     fig, ax = plt.subplots()
-    ax.hist(data_points)
-    ax.set(ylabel='voltage (mV)',
-           title=f'Neutron pulse for timestamp: {title} ')
+    ax.hist(total_energy, bins=50)
+    ax.set(ylabel='# of pulses', xlabel='total enegry (V)',
+           title=f'Histogram for total energy')
     ax.grid()
     plt.show()
 
