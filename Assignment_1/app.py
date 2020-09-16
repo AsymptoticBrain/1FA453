@@ -47,7 +47,7 @@ def load_data_file():
 
 # Creates a new array with converted data and one for the time stamps.
 def convert_to_voltages(data):
-    converted_data = (data[0:, 1:]) / (2e-10 - 1) * 0.6
+    converted_data = (data[0:, 1:]) / (2e10 - 1) * 0.6
     timestamps = data[0:, 0]
 
     return converted_data, timestamps
@@ -91,7 +91,7 @@ def calculate_mean(data):
 def calculate_max(data):
     max_value_array = []
     for row in data:
-        max_value = np.max(row)
+        max_value = np.min(row)
         max_value_array.append(max_value)
 
     max_value_array = np.asarray(max_value_array)
@@ -112,15 +112,15 @@ def calculate_total_energy(data):
 
 def create_histogram_energy(max_energy, total_energy):
     fig, ax = plt.subplots()
-    ax.hist(max_energy, bins=50)
-    ax.set(ylabel='# of pulses', xlabel='max energy (V)',
-           title=f'Histogram for max energy')
+    ax.hist(max_energy, bins=100)
+    ax.set(ylabel='# of pulses', xlabel='max voltage (V)',
+           title=f'Histogram for max voltage')
     ax.grid()
     plt.show()
 
     fig, ax = plt.subplots()
-    ax.hist(total_energy, bins=50)
-    ax.set(ylabel='# of pulses', xlabel='total enegry (V)',
+    ax.hist(total_energy, bins=100)
+    ax.set(ylabel='# of pulses', xlabel='total energy',
            title=f'Histogram for total energy')
     ax.grid()
     plt.show()
