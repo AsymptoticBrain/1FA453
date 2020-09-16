@@ -10,9 +10,14 @@ __license__ = "MIT"
 import numpy as np
 import matplotlib.pyplot as plt
 
+# Path to the data
 DATA_PATH = 'pulses.csv'
+# Number of data points used for baseline correction
 MEAN_NUMBER = 10
+# Set to pick a pulse for graphing
 PULSE = 200
+# Number of bins for the histograms
+BINS = 100
 
 
 def main():
@@ -65,7 +70,7 @@ def create_plot(data, title):
     ax.grid()
     plt.show()
 
-    # fig.savefig(f'neutron_pulse_{title}.png')
+    fig.savefig(f'neutron_pulse_{title}.png')
 
 
 # Calculates the mean of the first few elements and substracts this from the whole row
@@ -88,6 +93,7 @@ def calculate_mean(data):
     return mean
 
 
+# Calculates the max voltage for each pulse and returns an array with all values
 def calculate_max(data):
     max_value_array = []
     for row in data:
@@ -99,6 +105,7 @@ def calculate_max(data):
     return max_value_array
 
 
+# Calculates total energy of each pulse and returns an array with all values
 def calculate_total_energy(data):
     total_energy_array = []
     for row in data:
@@ -110,20 +117,26 @@ def calculate_total_energy(data):
     return total_energy_array
 
 
+# Graphs histograms for the max voltage and total energy
 def create_histogram_energy(max_energy, total_energy):
+    title = 'Histogram for max voltage'
     fig, ax = plt.subplots()
-    ax.hist(max_energy, bins=100)
+    ax.hist(max_energy, bins=BINS)
     ax.set(ylabel='# of pulses', xlabel='max voltage (V)',
-           title=f'Histogram for max voltage')
+           title=title)
     ax.grid()
     plt.show()
 
+    fig.savefig(f'{title}.png')
+
     fig, ax = plt.subplots()
-    ax.hist(total_energy, bins=100)
+    ax.hist(total_energy, bins=BINS)
     ax.set(ylabel='# of pulses', xlabel='total energy',
            title=f'Histogram for total energy')
     ax.grid()
     plt.show()
+
+    fig.savefig(f'{title}.png')
 
 
 if __name__ == '__main__':
