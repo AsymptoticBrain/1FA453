@@ -73,10 +73,11 @@ def create_plot(data, title):
     fig.savefig(f'neutron_pulse_{title}.png')
 
 
-# Calculates the mean of the first few elements and substracts this from the whole row
+# Calculates the mean of the first few elements and subtracts this from the whole row
 def baseline_correction(data):
     corrected_array = []
 
+    # loops through each row in the array and updates the values
     for row in data:
         mean = calculate_mean(row)
         corrected_row = row - mean
@@ -87,6 +88,7 @@ def baseline_correction(data):
     return corrected_array
 
 
+# used by baseline_correction to calculate the the mean for selected numbers
 def calculate_mean(data):
     mean = np.sum(data[0:MEAN_NUMBER]) / MEAN_NUMBER
 
