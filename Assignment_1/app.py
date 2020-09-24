@@ -39,7 +39,16 @@ def main():
     # Question 6:
     max_energy = calculate_max(corrected_data)
     tot_energy = calculate_total_energy(corrected_data)
-    create_histogram_energy(max_energy, tot_energy)
+
+    plot_histogram(data=max_energy,
+                   title='Histogram for max voltage',
+                   y_label='# of pulses',
+                   x_label='max voltage (V)')
+
+    plot_histogram(data=tot_energy,
+                   title='Histogram of total energy',
+                   y_label='# of pulses',
+                   x_label='total energy')
 
 
 # Load the data to a numpy array and returns it.
@@ -65,7 +74,7 @@ def create_plot(data, title):
 
     # evenly sampled time at 0,5ns intervals, divide the size of the
     # data array by 2 to have a nano sec scale
-    t = np.arange(0, data_points.size/2, 0.5)
+    t = np.arange(0, data_points.size / 2, 0.5)
 
     fig, ax = plt.subplots()
     ax.plot(t, data_points)
@@ -123,22 +132,11 @@ def calculate_total_energy(data):
     return total_energy_array
 
 
-# Graphs histograms for the max voltage and total energy
-def create_histogram_energy(max_energy, total_energy):
-    title = 'Histogram for max voltage'
+# Plots a histogram with defined bins and saves it as a png
+def plot_histogram(data, title='', y_label='', x_label=''):
     fig, ax = plt.subplots()
-    ax.hist(max_energy, bins=BINS)
-    ax.set(ylabel='# of pulses', xlabel='max voltage (V)',
-           title=title)
-    ax.grid()
-    plt.show()
-
-    fig.savefig(f'{title}.png')
-
-    title = 'Histogram of total energy'
-    fig, ax = plt.subplots()
-    ax.hist(total_energy, bins=BINS)
-    ax.set(ylabel='# of pulses', xlabel='total energy',
+    ax.hist(data, bins=BINS)
+    ax.set(ylabel=y_label, xlabel=x_label,
            title=title)
     ax.grid()
     plt.show()
