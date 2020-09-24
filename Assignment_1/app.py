@@ -63,9 +63,13 @@ def create_plot(data, title):
     title = title
     data_points = data
 
+    # evenly sampled time at 0,5ns intervals, divide the size of the
+    # data array by 2 to have a nano sec scale
+    t = np.arange(0, data_points.size/2, 0.5)
+
     fig, ax = plt.subplots()
-    ax.plot(data_points)
-    ax.set(ylabel='voltage (V)',
+    ax.plot(t, data_points)
+    ax.set(ylabel='voltage (V)', xlabel='time (ns)',
            title=f'Neutron pulse for timestamp: {title}')
     ax.grid()
     plt.show()
@@ -131,10 +135,11 @@ def create_histogram_energy(max_energy, total_energy):
 
     fig.savefig(f'{title}.png')
 
+    title = 'Histogram of total energy'
     fig, ax = plt.subplots()
     ax.hist(total_energy, bins=BINS)
     ax.set(ylabel='# of pulses', xlabel='total energy',
-           title=f'Histogram for total energy')
+           title=title)
     ax.grid()
     plt.show()
 
